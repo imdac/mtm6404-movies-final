@@ -135,3 +135,35 @@ const movies = [
     year: 2012
   }
 ]
+
+const app = Vue.createApp({
+  data: function () {
+    return {
+      movies: movies,
+      query: '',
+      sort: 'index'
+    }
+  },
+  methods: {
+    filterMovies: function () {
+      return this.movies.filter(movie =>
+        movie.title.toLowerCase().includes(this.query.toLowerCase()))
+    },
+    sortMovies: function () {
+      return this.filterMovies().sort((a, b) => {
+        if (a[this.sort] < b[this.sort]) {
+          return -1
+        } else if (a[this.sort] > b[this.sort]) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+    },
+    getMovies: function () {
+      return this.sortMovies()
+    }
+  }
+})
+
+const vm = app.mount('#app')

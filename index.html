@@ -12,16 +12,17 @@
   <div id="app" class="container">
     <h1>Movies</h1>
     <form>
-       <input type="text">
-       <select>
-         <option value="index">index</option>
-         <option value="title">title</option>
-         <option value="year">year</option>
-      </select>
-    </form>
-    <div class="movies">
-      <div class="movie">Title (year)</div>
-    </div>
+      <input type="text" v-model="query">
+      <select v-model="sort">
+        <option value="index">index</option>
+        <option value="title">title</option>
+        <option value="year">year</option>
+     </select>
+   </form>
+   <div class="movies">
+     <div class="movie"
+          v-for="movie in getMovies()">{{ movie.title }} ({{ movie.year }})</div>
+   </div>
   </div>
   <script src="script.js"></script>
 </body>
