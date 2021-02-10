@@ -11,7 +11,7 @@
 <body>
   <div id="app" class="container">
     <h1>Movies</h1>
-    <form>
+    <form v-on:submit.prevent>
       <input type="text" v-model="query">
       <select v-model="sort">
         <option value="index">index</option>
