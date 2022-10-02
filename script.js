@@ -2,7 +2,8 @@ const movies = [
   {
     index: 1,
     title: 'Dredd',
-    year: 2013
+    year: 2013,
+    selected: true
   },
   {
     index: 2,

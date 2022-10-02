@@ -21,7 +21,10 @@
    </form>
    <div class="movies">
      <div class="movie"
-          v-for="movie in getMovies()">{{ movie.title }} ({{ movie.year }})</div>
+          v-for="movie in getMovies()" @click="movie.selected = !movie.selected">
+            <span class="check" v-if="movie.selected">✔</span>
+            {{ movie.title }} ({{ movie.year }})
+        </div>
    </div>
   </div>
   <script src="script.js"></script>
