@@ -1,9 +1,8 @@
-const movies = [
+const data = [
   {
     index: 1,
     title: 'Dredd',
-    year: 2013,
-    selected: true
+    year: 2013
   },
   {
     index: 2,
@@ -137,34 +136,79 @@ const movies = [
   }
 ]
 
-const app = Vue.createApp({
-  data: function () {
-    return {
-      movies: movies,
-      query: '',
-      sort: 'index'
-    }
-  },
-  methods: {
-    filterMovies: function () {
-      return this.movies.filter(movie =>
-        movie.title.toLowerCase().includes(this.query.toLowerCase()))
-    },
-    sortMovies: function () {
-      return this.filterMovies().sort((a, b) => {
-        if (a[this.sort] < b[this.sort]) {
-          return -1
-        } else if (a[this.sort] > b[this.sort]) {
-          return 1
-        } else {
-          return 0
-        }
-      })
-    },
-    getMovies: function () {
-      return this.sortMovies()
-    }
-  }
-})
 
-const vm = app.mount('#app')
+function Movie (props) {
+  const {title, year} = props.movie
+  const [selected, setSelected] = React.useState(false)
+
+  function clickHandler () {
+    setSelected(!selected)
+  }
+
+  return (
+  <div className="movie" onClick={clickHandler}>
+    {selected && <span>x</span>}  {title} ({year})
+  </div>)
+}
+
+function Movies (props) {
+  const movies = props.movies
+
+  const moviesList = movies.map(movie => <Movie key={movie.index} movie={movie} />)
+
+  return (
+    <div className="movies">
+      {moviesList}    
+    </div>
+  )
+}
+
+function App () {
+  const [movies, setMovies] = React.useState(data)
+  const [query, setQuery] = React.useState('')
+  const [sortBy, setSortBy] = React.useState('index')
+
+  React.useEffect(() => {
+    setMovies(data.filter(movie => 
+      movie.title.toLowerCase().includes(query.toLowerCase())
+    ).sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) {
+        return -1
+      } else if (a[sortBy] > b[sortBy]) {
+        return 1
+      } else {
+        return 0
+      }
+    }))
+  }, [query, sortBy])
+
+  function formHandler (e) {
+    e.preventDefault();
+  }
+
+  function textHandler (e) {
+    setQuery(e.target.value)
+  }
+
+  function selectHandler (e) {
+    setSortBy(e.target.value)
+  }
+
+  return (
+    <React.Fragment>
+      <h1>Movies</h1>
+      <form onSubmit={formHandler}>
+        <input type="text" value={query} onChange={textHandler} />
+        <select value={sortBy} onChange={selectHandler}>
+          <option value="index">index</option>
+          <option value="title">title</option>
+          <option value="year">year</option>
+        </select>
+      </form>
+      <Movies movies={movies} />
+    </React.Fragment>
+  )
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<App />)
